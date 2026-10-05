@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The IB Research Kitchen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a kitchen menu board — left-aligned masthead, sessions written as recipe cards, the people as a brigade. */
+:root {
+  --bg: #EDF1EB;
+  --surface: #FAFBF7;
+  --ink: #1E292C;
+  --muted: #56645F;
+  --line: #C9D3CA;
+  --accent: #D9961A;
+  --accent-ink: #8F5E07;
+  --accent-soft: #F6E6C4;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131919; --surface: #1B2322; --ink: #E5EAE3; --muted: #98A6A0;
+    --line: #2D3937; --accent: #E6AE48; --accent-ink: #EBB85A; --accent-soft: #3A2F1A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131919; --surface: #1B2322; --ink: #E5EAE3; --muted: #98A6A0;
+  --line: #2D3937; --accent: #E6AE48; --accent-ink: #EBB85A; --accent-soft: #3A2F1A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+.wrap {
+  max-width: 68rem;
+  margin: 0 auto;
+  padding-inline: 1.25rem;
+  padding-block: 0 4rem;
+}
+a { color: var(--accent-ink); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+.label {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.05; }
+h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 1.25rem; font-weight: 700; line-height: 1.2; }
+p { margin: 0; }
+
+/* nav */
+nav {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: 0.75rem 1.5rem;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+.brand { font-family: var(--display); font-weight: 700; font-size: 1rem; color: var(--ink); text-decoration: none; }
+.brand span { color: var(--accent-ink); }
+nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+nav ul a { font-family: var(--mono); font-size: 0.8125rem; color: var(--muted); text-decoration: none; }
+nav ul a:hover { color: var(--ink); }
+
+/* hero */
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: end;
+  padding-block: 4rem 3.5rem;
+}
+.hero h1 {
+  font-size: clamp(3rem, 9vw, 6.5rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+}
+.hero h1 em { font-style: normal; color: var(--accent-ink); }
+.hero .lede { margin-top: 1.75rem; max-width: 34rem; font-size: 1.2rem; color: var(--ink); }
+.hero .lede + p { margin-top: 0.75rem; max-width: 34rem; color: var(--muted); }
+
+.today {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1.5rem;
+  position: relative;
+}
+.today::before {
+  content: ""; position: absolute; inset: 0 0 auto 0; height: 6px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 14px, transparent 14px 22px);
+  border-radius: 4px 4px 0 0;
+}
+.today .label { display: block; margin-bottom: 0.75rem; }
+.today h3 { font-size: 1.4rem; }
+.today .who { margin-top: 0.5rem; color: var(--muted); }
+.today dl { margin: 1.25rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.35rem 1rem; font-family: var(--mono); font-size: 0.8125rem; }
+.today dt { color: var(--muted); }
+.today dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+section { padding-block: 3.5rem; border-top: 1px solid var(--line); }
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0.5rem 2rem; margin-bottom: 2rem; }
+.section-head p { max-width: 32rem; color: var(--muted); }
+
+/* how it works */
+.method { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; counter-reset: step; }
+.method li { list-style: none; counter-increment: step; display: grid; gap: 0.5rem; }
+.method ol { margin: 0; padding: 0; display: contents; }
+.method li::before {
+  content: "Step " counter(step);
+  font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-ink);
+}
+.method li p { color: var(--muted); }
+
+/* menu */
+.menu { display: grid; gap: 0; }
+.dish {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr) auto;
+  gap: 0.5rem 2rem;
+  align-items: baseline;
+  padding-block: 1.25rem;
+  border-bottom: 1px dashed var(--line);
+}
+.dish:first-child { border-top: 1px dashed var(--line); }
+.dish time { font-family: var(--mono); font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.dish .meta { color: var(--muted); font-size: 0.95rem; margin-top: 0.2rem; }
+.tag {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em;
+  padding: 0.2rem 0.55rem; border-radius: 999px;
+  background: var(--accent-soft); color: var(--accent-ink); white-space: nowrap;
+}
+.example { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); margin-top: 1rem; }
+
+/* chefs */
+.brigade { display: grid; gap: 2.5rem; }
+.station h3 { font-family: var(--mono); font-size: 0.8125rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); margin-bottom: 1.25rem; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1.5rem; }
+.person { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: 1rem; align-items: center; }
+.avatar {
+  width: 3.5rem; height: 3.5rem; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--surface); border: 1px solid var(--line);
+  font-family: var(--display); font-weight: 700; color: var(--accent-ink);
+}
+.person strong { display: block; font-family: var(--display); font-weight: 700; font-size: 1.05rem; line-height: 1.25; }
+.person span { color: var(--muted); font-size: 0.92rem; }
+.person.placeholder .avatar { border-style: dashed; color: var(--muted); }
+.person.placeholder strong { color: var(--muted); font-weight: 500; }
+
+/* recipes */
+.pantry { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.5rem; }
+.jar { border-top: 3px solid var(--ink); padding-top: 1rem; display: grid; gap: 0.5rem; }
+.jar p { color: var(--muted); }
+
+/* join */
+.join { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.join .big { font-family: var(--display); font-size: clamp(1.6rem, 3.5vw, 2.25rem); font-weight: 700; line-height: 1.15; text-wrap: balance; }
+.contact { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 1.5rem; display: grid; gap: 0.75rem; }
+.email-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.email { font-family: var(--mono); font-size: 0.9rem; user-select: all; word-break: break-all; }
+button.copy {
+  font-family: var(--mono); font-size: 0.75rem; cursor: pointer;
+  background: var(--ink); color: var(--bg); border: 0; border-radius: 999px; padding: 0.35rem 0.8rem;
+}
+footer { padding-block: 2rem 0; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0.5rem; }
+
+@media (max-width: 760px) {
+  .hero, .join { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .hero { padding-block: 2.5rem; }
+  .method, .pantry { grid-template-columns: minmax(0, 1fr); }
+  .dish { grid-template-columns: minmax(0, 1fr); gap: 0.35rem; }
+  .dish .tag { justify-self: start; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero h1 em { transition: color .3s; }
+}
+</style>
+</head>
+<body style="margin:0">
+
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="brand" href="#top">The IB Research <span>Kitchen</span></a>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#menu">On the menu</a></li>
+      <li><a href="#chefs">The Chefs</a></li>
+      <li><a href="#recipes">Recipes</a></li>
+      <li><a href="#join">Join us</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <div>
+      <p class="label">International Business · Informal research group</p>
+      <h1 style="margin-top:1rem">The IB Research <em>Kitchen</em></h1>
+      <p class="lede">Half-baked ideas welcome. We share food, talk through research in progress, and help each other get papers out of the oven.</p>
+      <p>PhD researchers, postdocs, lecturers and professors in International Business, around one table.</p>
+    </div>
+    <aside class="today" aria-label="Next session">
+      <span class="label">Next on the menu · example</span>
+      <h3>Institutional voids and the entry strategies of emerging-market multinationals</h3>
+      <p class="who">Work-in-progress, presented by a PhD researcher</p>
+      <dl>
+        <dt>Date</dt><dd>Wed 21 Oct 2026</dd>
+        <dt>Serves</dt><dd>10–12</dd>
+        <dt>Prep</dt><dd>15 min talk</dd>
+        <dt>Cook</dt><dd>45 min discussion</dd>
+        <dt>Bring</dt><dd>Lunch, questions</dd>
+      </dl>
+    </aside>
+  </header>
+
+  <section id="how" aria-labelledby="how-h">
+    <div class="section-head">
+      <h2 id="how-h">How it works</h2>
+      <p>No slides required, no formal discussant, no judgement. Just a good meal and good questions.</p>
+    </div>
+    <div class="method">
+      <ol>
+        <li><h3>Someone brings an idea</h3><p>A paper draft, a puzzling result, a research question you are not sure about yet, or a revise-and-resubmit you need to think through.</p></li>
+        <li><h3>We eat and talk</h3><p>A short presentation over food, then an open conversation. Junior and senior members around the same table.</p></li>
+        <li><h3>You leave with something</h3><p>New angles on theory, data, methods or framing, and people to follow up with afterwards.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="menu" aria-labelledby="menu-h">
+    <div class="section-head">
+      <h2 id="menu-h">On the menu</h2>
+      <p>Upcoming sessions. Want to present? Tell us and we will find you a slot.</p>
+    </div>
+    <div class="menu">
+      <div class="dish">
+        <time datetime="2026-10-21">21 Oct 2026</time>
+        <div><h3>Institutional voids and emerging-market multinationals</h3><p class="meta">PhD researcher · 12:30, seminar room</p></div>
+        <span class="tag">Work-in-progress</span>
+      </div>
+      <div class="dish">
+        <time datetime="2026-11-04">04 Nov 2026</time>
+        <div><h3>Reading together: a recent JIBS paper on state ownership</h3><p class="meta">Discussion led by a postdoc · 12:30</p></div>
+        <span class="tag">Paper discussion</span>
+      </div>
+      <div class="dish">
+        <time datetime="2026-11-18">18 Nov 2026</time>
+        <div><h3>Surviving the R&amp;R: responding to reviewers</h3><p class="meta">Advisor-led clinic · 12:30</p></div>
+        <span class="tag">Clinic</span>
+      </div>
+    </div>
+    <p class="example">Example sessions for layout. Replace with your real programme.</p>
+  </section>
+
+  <section id="chefs" aria-labelledby="chefs-h">
+    <div class="section-head">
+      <h2 id="chefs-h">The Chefs</h2>
+      <p>Everyone cooks. Senior colleagues join as advisors.</p>
+    </div>
+    <div class="brigade">
+      <div class="station">
+        <h3>Advisors</h3>
+        <div class="people">
+          <div class="person"><div class="avatar" aria-hidden="true">MP</div><div><strong>Professor Marina Papanastasiou</strong><span>Professor of International Business</span></div></div>
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Advisor name</strong><span>Title</span></div></div>
+        </div>
+      </div>
+      <div class="station">
+        <h3>Lecturers &amp; Postdocs</h3>
+        <div class="people">
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Member name</strong><span>Role · research interests</span></div></div>
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Member name</strong><span>Role · research interests</span></div></div>
+        </div>
+      </div>
+      <div class="station">
+        <h3>PhD Researchers</h3>
+        <div class="people">
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Member name</strong><span>Research interests</span></div></div>
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Member name</strong><span>Research interests</span></div></div>
+          <div class="person placeholder"><div class="avatar" aria-hidden="true">+</div><div><strong>Member name</strong><span>Research interests</span></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="recipes" aria-labelledby="recipes-h">
+    <div class="section-head">
+      <h2 id="recipes-h">Recipes</h2>
+      <p>What we have cooked so far, kept for anyone who missed a session.</p>
+    </div>
+    <div class="pantry">
+      <div class="jar"><span class="label">Past sessions</span><h3>Session notes &amp; slides</h3><p>Short notes from each meeting and the presenter's materials, where they are happy to share.</p></div>
+      <div class="jar"><span class="label">Reading</span><h3>The shared reading list</h3><p>Papers that came up in discussion, grouped by theme: institutions, FDI, governance, emerging markets.</p></div>
+      <div class="jar"><span class="label">Toolkit</span><h3>Methods &amp; writing</h3><p>Data sources, method resources and advice on reviews and submissions collected along the way.</p></div>
+    </div>
+  </section>
+
+  <section id="join" aria-labelledby="join-h">
+    <div class="join">
+      <div>
+        <h2 id="join-h" class="label" style="font-family:var(--mono);font-size:.75rem;font-weight:500">Join us</h2>
+        <p class="big" style="margin-top:1rem">If you work on International Business, there is a seat at the table for you.</p>
+        <p style="margin-top:1rem;color:var(--muted);max-width:34rem">Drop us a line to join the mailing list, suggest a topic or sign up to present. First-years and visiting researchers are especially welcome.</p>
+      </div>
+      <div class="contact">
+        <span class="label">Contact</span>
+        <div class="email-row">
+          <span class="email" id="email">ibkitchen@example.ac.uk</span>
+          <button class="copy" id="copy-btn" type="button">Copy</button>
+        </div>
+        <p style="color:var(--muted);font-size:.92rem">Placeholder address. Replace with the group's contact.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="label">The IB Research Kitchen</span>
+    <span class="label">An informal group · est. 2026</span>
+  </footer>
+</div>
+
+<script>
+document.getElementById('copy-btn').addEventListener('click', function () {
+  var btn = this, text = document.getElementById('email').textContent;
+  function done(msg){ btn.textContent = msg; setTimeout(function(){ btn.textContent = 'Copy'; }, 1600); }
+  function fallback(){
+    var r = document.createRange(); r.selectNodeContents(document.getElementById('email'));
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected');
+  }
+  try {
+    navigator.clipboard.writeText(text).then(function(){ done('Copied'); }, fallback);
+  } catch (e) { fallback(); }
+});
+</script>
+</body>
+</html>
